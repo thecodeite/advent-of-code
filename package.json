@@ -4,6 +4,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "go": "./go.sh",
+    "new-day": "./new-day.sh"
+  },
   "dependencies": {
     "@types/node": "^18.11.10",
     "nodemon": "^2.0.20",
