@@ -1,5 +1,5 @@
+import { Input } from "./parse";
 
-
-export function star1(lines: string[]) {
-  console.log('solution to star 1:', lines.length);
+export function star1(input: Input) {
+  console.log("solution to star 1:", input.lines.length);
 }
