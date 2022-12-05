@@ -25,4 +25,4 @@ let doReal = true;
 const input = parse(doReal ? file : example);
 
 star1(input);
-// star2(input);
+star2(input);

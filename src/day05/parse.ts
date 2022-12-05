@@ -24,3 +24,18 @@ export function parse(file: string): Input {
     .map(([count, from, to]) => ({ count, from, to }));
   return { state, moves };
 }
+
+export function format(state: string[][]) {
+  const length = Math.max(...state.map(col => col.length));
+  const sameLength = state.map(col =>
+    Array.from({ length }).map((_, i) => col[i]),
+  );
+  const vertical = sameLength
+    .rotateACW()
+    .map(row => row.map(ch => (ch ? `[${ch}]` : "   ")).join(" "));
+  console.log(vertical.join("\n"));
+  console.log(
+    Array.from({ length: state.length }, (_, i) => ` ${i + 1} `).join(" "),
+  );
+  console.log(``);
+}
