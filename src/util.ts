@@ -42,3 +42,14 @@ if (!Array.prototype.take) {
     return this.filter((_, i) => i <= length - 1);
   };
 }
+
+if (!Array.prototype.slidingG) {
+  Array.prototype.slidingG = function* (windowLength: number) {
+    const windows = this.length - windowLength + 1;
+    const clone = [...this];
+    for (let i = 0; i < windows; i += 1) {
+      yield clone.slice(i, i + windowLength);
+    }
+    return null;
+  };
+}

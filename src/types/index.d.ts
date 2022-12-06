@@ -7,5 +7,6 @@ declare global {
     rotateCW(): T[];
     rotateACW(): T[];
     take(length: number): T[];
+    slidingG(windowLength: number): Generator<T[], null, unknown>;
   }
 }
