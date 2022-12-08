@@ -4,6 +4,23 @@ if (!Array.prototype.sum) {
   };
 }
 
+if (!Array.prototype.product) {
+  Array.prototype.product = function () {
+    return this.reduce((p, c) => p * c);
+  };
+}
+
+if (!Array.prototype.max) {
+  Array.prototype.max = function () {
+    return Math.max(...this);
+  };
+}
+if (!Array.prototype.min) {
+  Array.prototype.min = function () {
+    return Math.min(...this);
+  };
+}
+
 if (!Array.prototype.grouped) {
   Array.prototype.grouped = function (groupSize: number) {
     const result = [];
@@ -51,5 +68,11 @@ if (!Array.prototype.slidingG) {
       yield clone.slice(i, i + windowLength);
     }
     return null;
+  };
+}
+
+if (!Array.prototype.reverseSafe) {
+  Array.prototype.reverseSafe = function <T>(): T[] {
+    return [...this].reverse();
   };
 }
