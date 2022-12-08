@@ -9,7 +9,7 @@ interface Folder {
 
 const allFolders: Record<string, Folder> = {};
 
-export function star1(input: Input) {
+export function solve(input: Input) {
   const commands = [...input.commands];
   const isRoot = commands[0].exe === "cd" && commands[0].arg === "/";
   if (!isRoot) throw new Error("must start at root");

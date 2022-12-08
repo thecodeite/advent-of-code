@@ -1,7 +1,7 @@
 import "../util";
 import * as fs from "node:fs/promises";
-import { star1 } from "./star1";
-import { star2 } from "./star2";
+import { solve as solve1 } from "./star1";
+import { solve as solve2 } from "./star2";
 import { parse } from "./parse";
 const calDate = process.env.CAL_DATE;
 
@@ -39,5 +39,5 @@ doReal = true;
 
 const lines = parse(doReal ? file : example);
 
-star1(lines);
-// star2(lines);
+solve1(lines);
+solve2(lines);
