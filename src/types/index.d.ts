@@ -13,4 +13,9 @@ declare global {
     slidingG(windowLength: number): Generator<T[], null, unknown>;
     reverseSafe(): T[];
   }
+
+  interface String {
+    stripPrefix(prefix: string): string;
+    stripPostfix(prefix: string): string;
+  }
 }

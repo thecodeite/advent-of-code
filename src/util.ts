@@ -77,6 +77,17 @@ if (!Array.prototype.reverseSafe) {
   };
 }
 
+if (!String.prototype.stripPrefix) {
+  String.prototype.stripPrefix = function (prefix: string): string {
+    return this.substring(prefix.length);
+  };
+}
+if (!String.prototype.stripPostfix) {
+  String.prototype.stripPostfix = function (postfix: string): string {
+    return this.substring(-postfix.length);
+  };
+}
+
 export function range(length: number) {
   return Array.from({ length }, (_, i) => i);
 }
