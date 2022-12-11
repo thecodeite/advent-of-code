@@ -76,3 +76,11 @@ if (!Array.prototype.reverseSafe) {
     return [...this].reverse();
   };
 }
+
+export function range(length: number) {
+  return Array.from({ length }, (_, i) => i);
+}
+
+export function repeat(char: string, length: number) {
+  return Array.from({ length }, (_, i) => char).join("");
+}
