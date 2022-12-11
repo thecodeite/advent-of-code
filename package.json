@@ -6,12 +6,18 @@
   "license": "MIT",
   "scripts": {
     "go": "./go.sh",
-    "new-day": "./new-day.sh"
+    "new-day": "./new-day.sh",
+    "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@types/node": "^18.11.10",
+    "jest": "^29.3.1",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.2.4",
+    "ts-jest": "^29.0.3"
   }
 }
