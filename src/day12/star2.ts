@@ -1,4 +1,5 @@
-import { charRefA, Chart, Input, Vector } from "./parse";
+import { Vector } from "../Vector";
+import { charRefA, Chart, Input } from "./parse";
 
 interface All {
   parent: string;
