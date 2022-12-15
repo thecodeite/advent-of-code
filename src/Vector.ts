@@ -1,4 +1,9 @@
-export class Vector {
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export class Vector implements Point {
   x: number;
   y: number;
   constructor(x: number, y: number) {
@@ -7,6 +12,9 @@ export class Vector {
   }
 
   toString() {
+    return `${this.x},${this.y}`;
+  }
+  valueOf() {
     return `${this.x},${this.y}`;
   }
 
