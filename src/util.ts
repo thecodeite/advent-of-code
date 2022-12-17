@@ -1,22 +1,32 @@
 if (!Array.prototype.sum) {
   Array.prototype.sum = function () {
+    if (this.length === 0) return 0;
     return this.reduce((p, c) => p + c);
   };
 }
 
 if (!Array.prototype.product) {
   Array.prototype.product = function () {
+    if (this.length === 0) return 0;
     return this.reduce((p, c) => p * c);
   };
 }
 
 if (!Array.prototype.max) {
-  Array.prototype.max = function () {
+  Array.prototype.max = function (fn?: (arg: any) => number) {
+    if (fn) {
+      const sorted = [...this].sort((a, b) => fn(b) - fn(a));
+      return sorted[0];
+    }
     return Math.max(...this);
   };
 }
 if (!Array.prototype.min) {
-  Array.prototype.min = function () {
+  Array.prototype.min = function (fn?: (arg: any) => number) {
+    if (fn) {
+      const sorted = [...this].sort((a, b) => fn(a) - fn(b));
+      return sorted[0];
+    }
     return Math.min(...this);
   };
 }
@@ -94,4 +104,10 @@ export function range(length: number) {
 
 export function repeat(char: string, length: number) {
   return Array.from({ length }, (_, i) => char).join("");
+}
+
+if (!Set.prototype.removed) {
+  Set.prototype.removed = function <T>(toRemove: Set<T>) {
+    return new Set([...this].filter(x => !toRemove.has(x)));
+  };
 }

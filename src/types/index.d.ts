@@ -5,7 +5,9 @@ declare global {
     sum(): number;
     product(): number;
     max(): number;
+    max(fn: (item: T) => number): T;
     min(): number;
+    min(fn: (item: T) => number): T;
     grouped(groupSize: number): T[][];
     rotateCW(): T[];
     rotateACW(): T[];
@@ -17,5 +19,9 @@ declare global {
   interface String {
     stripPrefix(prefix: string): string;
     stripPostfix(prefix: string): string;
+  }
+
+  interface Set<T> {
+    removed(toRemove: Set<t>): Set<t>;
   }
 }
