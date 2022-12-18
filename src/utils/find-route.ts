@@ -17,7 +17,7 @@ export function buildMinimumSpanTree(
   let nodes: Record<string, TreeNode | undefined> = { [from]: root };
   let unvisited = [root];
 
-  let limit = 10000;
+  let limit = 10000000;
   for (;;) {
     if (limit-- < 0) throw new Error("Too many steps");
     const currentCheck = unvisited.shift();
