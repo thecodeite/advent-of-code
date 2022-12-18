@@ -499,7 +499,7 @@ export function solve(input: Input) {
 
     if (!jetAndFall(moves)) {
       blocks++;
-      console.log("blocks:", blocks);
+      // console.log("blocks:", blocks);
       if (!foundCycle) {
         const mapOfTop = mapTop(board, height);
         if (mapOfTop) {
