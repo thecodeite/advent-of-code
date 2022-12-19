@@ -64,6 +64,10 @@ function possibleActions(
   if (state.ore >= blueprint.geoCostOre && state.ob >= blueprint.geoCostOb) {
     return [Actions.GeodeBot];
   }
+  if (state.ore >= blueprint.obCostOre && state.clay >= blueprint.obCostClay) {
+    return [Actions.ObsidianBot];
+  }
+
   const minute = state.actions.length + 1;
   const actions: Actions[] = [Actions.Nothing];
   if (minute === 24) return actions;
@@ -79,140 +83,149 @@ function possibleActions(
   let allowOb = minute < 22;
   const blockers = [];
 
+  const left = 24 - minute;
+
+  if (state.oreBots * left + state.ore > maxOre * left) allowOre = false;
+  if (state.clayBots * left + state.clay > blueprint.obCostClay * left)
+    allowClay = false;
+  if (state.obBots * left + state.ob > blueprint.geoCostOb * left)
+    allowOb = false;
+  /*
+  x = robot
+  r = res
+  y = stock
+
+  if (X * T +Y > t * Z)
+  */
   // if (minute === 23) {
   //   console.log("23. allowOre:", allowOre);
   // }
 
   /* Geo Start */
-  if (state.obBots > 0) {
-    const geoBotEtaCurrent = Math.ceil(
-      Math.max(
-        (blueprint.geoCostOre - state.ore) / state.oreBots,
-        (blueprint.geoCostOb - state.ob) / state.obBots,
-      ),
-    );
+  // if (state.obBots > 0) {
+  //   const geoBotEtaCurrent = Math.ceil(
+  //     Math.max(
+  //       (blueprint.geoCostOre - state.ore) / state.oreBots,
+  //       (blueprint.geoCostOb - state.ob) / state.obBots,
+  //     ),
+  //   );
 
-    const geoBotEtaBuildOb = Math.ceil(
-      Math.max(
-        (blueprint.geoCostOre - state.ore + blueprint.obCostOre) /
-          state.oreBots,
-        (blueprint.geoCostOb - state.ob) / (state.obBots + 1),
-      ),
-    );
-    if (geoBotEtaCurrent < geoBotEtaBuildOb) {
-      allowOb = false;
-      blockers.push("geo blocks ob");
-    }
+  //   const geoBotEtaBuildOb = Math.ceil(
+  //     Math.max(
+  //       (blueprint.geoCostOre - state.ore + blueprint.obCostOre) /
+  //         state.oreBots,
+  //       (blueprint.geoCostOb - state.ob) / (state.obBots + 1),
+  //     ),
+  //   );
+  //   if (geoBotEtaCurrent < geoBotEtaBuildOb) {
+  //     allowOb = false;
+  //     blockers.push("geo blocks ob");
+  //   }
 
-    const geoBotEtaBuildClay = Math.ceil(
-      Math.max(
-        (blueprint.geoCostOre - state.ore + blueprint.clayCostOre) /
-          state.oreBots,
-        (blueprint.geoCostOb - state.ob) / state.obBots,
-      ),
-    );
-    if (geoBotEtaCurrent < geoBotEtaBuildClay) {
-      allowClay = false;
-      blockers.push("geo blocks clay");
-    }
+  //   const geoBotEtaBuildClay = Math.ceil(
+  //     Math.max(
+  //       (blueprint.geoCostOre - state.ore + blueprint.clayCostOre) /
+  //         state.oreBots,
+  //       (blueprint.geoCostOb - state.ob) / state.obBots,
+  //     ),
+  //   );
+  //   if (geoBotEtaCurrent < geoBotEtaBuildClay) {
+  //     allowClay = false;
+  //     blockers.push("geo blocks clay");
+  //   }
 
-    if (allowOre) {
-      const geoBotEtaBuildOre = Math.ceil(
-        Math.max(
-          (blueprint.geoCostOre - state.ore + blueprint.oreCostOre) /
-            (state.oreBots + 1),
-          (blueprint.geoCostOb - state.ob) / state.obBots,
-        ),
-      );
-      if (geoBotEtaCurrent < geoBotEtaBuildOre) {
-        allowOre = false;
-        blockers.push("geo blocks ore");
-      }
-    }
+  //   if (allowOre) {
+  //     const geoBotEtaBuildOre = Math.ceil(
+  //       Math.max(
+  //         (blueprint.geoCostOre - state.ore + blueprint.oreCostOre) /
+  //           (state.oreBots + 1),
+  //         (blueprint.geoCostOb - state.ob) / state.obBots,
+  //       ),
+  //     );
+  //     if (geoBotEtaCurrent < geoBotEtaBuildOre) {
+  //       allowOre = false;
+  //       blockers.push("geo blocks ore");
+  //     }
+  //   }
 
-    // if (minute === 11) {
-    //   console.log("geo", { allowOre, allowClay, allowOb });
-    //   console.log({
-    //     geoBotEtaCurrent,
-    //     geoBotEtaBuildOb,
-    //     geoBotEtaBuildClay,
-    //   });
-    // }
-  }
+  //   // if (minute === 11) {
+  //   //   console.log("geo", { allowOre, allowClay, allowOb });
+  //   //   console.log({
+  //   //     geoBotEtaCurrent,
+  //   //     geoBotEtaBuildOb,
+  //   //     geoBotEtaBuildClay,
+  //   //   });
+  //   // }
+  // }
   /* Geo end */
 
   // max(etaOre, etaClay) vs max(etaOre-const, etaClay+1)
 
   /* Ob start */
-  if (state.clayBots > 0) {
-    const obBotEtaCurrent = Math.ceil(
-      Math.max(
-        (blueprint.obCostOre - state.ore) / state.oreBots,
-        (blueprint.obCostClay - state.clay) / state.clayBots,
-      ),
-    );
+  // if (state.clayBots > 0) {
+  //   const obBotEtaCurrent = Math.ceil(
+  //     Math.max(
+  //       (blueprint.obCostOre - state.ore) / state.oreBots,
+  //       (blueprint.obCostClay - state.clay) / state.clayBots,
+  //     ),
+  //   );
 
-    const obBotEtaBuildClay = Math.ceil(
-      Math.max(
-        (blueprint.obCostOre - state.ore + blueprint.clayCostOre) /
-          state.oreBots,
-        (blueprint.obCostClay - state.clay) / (state.clayBots + 1),
-      ),
-    );
+  //   const obBotEtaBuildClay = Math.ceil(
+  //     Math.max(
+  //       (blueprint.obCostOre - state.ore + blueprint.clayCostOre) /
+  //         state.oreBots,
+  //       (blueprint.obCostClay - state.clay) / (state.clayBots + 1),
+  //     ),
+  //   );
 
-    if (obBotEtaCurrent < obBotEtaBuildClay) {
-      allowClay = false;
-      blockers.push("ob blocks clay");
-    }
+  //   if (obBotEtaCurrent < obBotEtaBuildClay) {
+  //     allowClay = false;
+  //     blockers.push("ob blocks clay");
+  //   }
 
-    if (allowOre) {
-      const obBotEtaBuildOre = Math.ceil(
-        Math.max(
-          (blueprint.obCostOre - state.ore + blueprint.oreCostOre) /
-            (state.oreBots + 1),
-          (blueprint.obCostClay - state.clay) / state.clayBots,
-        ),
-      );
+  //   if (allowOre) {
+  //     const obBotEtaBuildOre = Math.ceil(
+  //       Math.max(
+  //         (blueprint.obCostOre - state.ore + blueprint.oreCostOre) /
+  //           (state.oreBots + 1),
+  //         (blueprint.obCostClay - state.clay) / state.clayBots,
+  //       ),
+  //     );
 
-      if (obBotEtaCurrent < obBotEtaBuildOre) {
-        allowOre = false;
-        blockers.push("ob blocks ore");
-      }
-    }
-  }
+  //     if (obBotEtaCurrent < obBotEtaBuildOre) {
+  //       allowOre = false;
+  //       blockers.push("ob blocks ore");
+  //     }
+  //   }
+  // }
   /* Ob end */
 
   /* Clay start */
-  if (allowOre) {
-    const targetClayBots = 2;
-    const clayBotEtaCurrent = Math.ceil(
-      (blueprint.clayCostOre * targetClayBots - state.ore) / state.oreBots,
-    );
+  // if (allowOre) {
+  //   const targetClayBots = 2;
+  //   const clayBotEtaCurrent = Math.ceil(
+  //     (blueprint.clayCostOre * targetClayBots - state.ore) / state.oreBots,
+  //   );
 
-    const clayBotEtaBuildOre = Math.ceil(
-      (blueprint.clayCostOre * targetClayBots -
-        state.ore +
-        blueprint.oreCostOre) /
-        (state.oreBots + 1),
-    );
+  //   const clayBotEtaBuildOre = Math.ceil(
+  //     (blueprint.clayCostOre * targetClayBots -
+  //       state.ore +
+  //       blueprint.oreCostOre) /
+  //       (state.oreBots + 1),
+  //   );
 
-    if (clayBotEtaCurrent < clayBotEtaBuildOre) {
-      allowOre = false;
-      blockers.push(
-        `clay blocks ore ${clayBotEtaCurrent} < ${clayBotEtaBuildOre}`,
-      );
-    }
-  }
+  //   if (clayBotEtaCurrent < clayBotEtaBuildOre) {
+  //     allowOre = false;
+  //     blockers.push(
+  //       `clay blocks ore ${clayBotEtaCurrent} < ${clayBotEtaBuildOre}`,
+  //     );
+  //   }
+  // }
   /* Clay end */
 
   // if (minute === 5) {
   //   console.log("5. blockers:", blockers);
   // }
-
-  if (minute === 9 && isCorrectSoFar) {
-    console.log("blockers:", blockers);
-    console.log({ allowOb, allowClay, allowOre });
-  }
 
   // if (state.oreBots > 4) allowOre = false;
   // if (24 - state.actions.length === 12) {
@@ -337,19 +350,20 @@ function applyAction(action: Actions, next: State, blueprint: Blueprint) {
   }
 }
 
-function continueBlueprint(
+function* continueBlueprint(
   blueprint: Blueprint,
   state: State,
   time: number,
   isCorrectSoFar: boolean,
-): State[] {
+): Generator<State, null> {
   const actions = possibleActions(blueprint, state, isCorrectSoFar);
-  const solution = solutions[blueprint.id][time - 1];
 
-  if (isCorrectSoFar && !actions.includes(solution)) {
+  if (isCorrectSoFar && !actions.includes(solutions[blueprint.id][time - 1])) {
     console.log("state.actions:", state.actions.join());
     console.log(
-      `Error at minute ${time}. Expected ${botNames[solution]} to be in ${actions}`,
+      `Error at minute ${time}. Expected ${
+        botNames[solutions[blueprint.id][time - 1]]
+      } to be in ${actions}`,
     );
     throw "";
   }
@@ -372,19 +386,22 @@ function continueBlueprint(
 
     // console.log("newStates.length:", newStates.length);
 
-    const results = actions.flatMap(action => {
-      return continueBlueprint(
+    // const results = actions.flatMap(action => {
+    for (const action of actions) {
+      yield* continueBlueprint(
         blueprint,
         applyAction(action, next, blueprint),
         time + 1,
-        isCorrectSoFar && action === solution,
+        isCorrectSoFar && action === solutions[blueprint.id][time - 1],
       );
-    });
+    }
+    // });
 
     // console.log("results.length:", results.length);
-    return results;
+    //return results;
   }
-  return [next];
+  yield next;
+  return null;
 }
 
 function replayBlueprint(
@@ -494,16 +511,40 @@ function replayBlueprint(
 
 function runBlueprint(blueprint: Blueprint) {
   const state = createNewState();
-  const results = continueBlueprint(blueprint, state, 1, true);
-  console.log("blueprint", blueprint.id, "results.length:", results.length);
-  return results.max(r => r.geo);
+  // const results = [...continueBlueprint(blueprint, state, 1, true)];
+  const it = continueBlueprint(blueprint, state, 1, false);
+  let next = it.next();
+  let best = next.value as State;
+  let count = 1;
+  while (!next.done) {
+    if (next.value && next.value.geo > best.geo) {
+      best = next.value;
+    }
+    next = it.next();
+    count++;
+  }
+  console.log("blueprint", blueprint.id, "results.length:", count);
+  return best;
+  //const results = [...it];
+  // const first = it.next().value;
+  // if (first === null) throw "err";
+  // console.log({ first });
+  // return first;
+
+  // const second = it.next().value;
+  // const third = it.next().value;
+  // const results = [first, second, third];
+  // console.log("blueprint", blueprint.id, "results.length:", results.length);
+  //return results.max(r => r.geo);
 }
 
 const calDate = process.env.CAL_DATE;
 
-export function solveReal(input: Input) {
+export function solve(input: Input) {
   const q = input.blueprints.map(blueprint => {
+    console.time(`blueprint ${blueprint.id}`);
     const best = runBlueprint(blueprint);
+    console.timeEnd(`blueprint ${blueprint.id}`);
     console.log(`Best for blueprint ${blueprint.id} is ${best.geo}`);
     return best.geo * blueprint.id;
   });
@@ -528,14 +569,14 @@ export function solveReal(input: Input) {
   // return [best1.geo, best2.geo];
 }
 
-export function solve(input: Input) {
+export function solveDebug(input: Input) {
   let best1 = undefined as State | undefined;
   let best2 = undefined as State | undefined;
 
-  // best1 = runBlueprint(input.blueprints[0]);
-  // replayBlueprint(input.blueprints[0], createNewState(), best1.actions);
-  // writeFileSync(`./src/day${calDate}/trace.txt`, traceLog.join("\n"));
-  // traceLog.length = 0;
+  best1 = runBlueprint(input.blueprints[0]);
+  replayBlueprint(input.blueprints[0], createNewState(), best1.actions);
+  writeFileSync(`./src/day${calDate}/trace.txt`, traceLog.join("\n"));
+  traceLog.length = 0;
 
   best2 = runBlueprint(input.blueprints[1]);
   replayBlueprint(input.blueprints[1], createNewState(), best2.actions);
@@ -558,5 +599,8 @@ export function solve(input: Input) {
 
   Star 1: 1623 - Too low
   Star 1: 1639 - Too low
+  Star 1: 1800 - Tactical guess, too high
+  Star 1: 1649 - Incorrect
+  Star 2: 1675 - Correct
 
 */
