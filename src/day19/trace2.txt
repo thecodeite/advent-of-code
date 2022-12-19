@@ -1,0 +1,140 @@
+== Minute 1 ==
+1 ore-collecting robot collects 1 ore; you now have 1 ore.
+
+== Minute 2 ==
+1 ore-collecting robot collects 1 ore; you now have 2 ore.
+
+== Minute 3 ==
+Spend 2 ore to start building a ore-collecting robot.
+1 ore-collecting robot collects 1 ore; you now have 1 ore.
+The new o robot is ready; you now have 2 of them.
+
+== Minute 4 ==
+2 ore-collecting robots collect 2 ore; you now have 3 ore.
+
+== Minute 5 ==
+Spend 2 ore to start building a ore-collecting robot.
+2 ore-collecting robots collect 2 ore; you now have 3 ore.
+The new o robot is ready; you now have 3 of them.
+
+== Minute 6 ==
+Spend 3 ore to start building a clay-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 3 ore.
+The new c robot is ready; you now have 1 of them.
+
+== Minute 7 ==
+Spend 3 ore to start building a clay-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 3 ore.
+1 clay-collecting robot collects 1 clay; you now have 1 clay.
+The new c robot is ready; you now have 2 of them.
+
+== Minute 8 ==
+Spend 3 ore to start building a clay-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 3 ore.
+2 clay-collecting robots collect 2 clay; you now have 3 clay.
+The new c robot is ready; you now have 3 of them.
+
+== Minute 9 ==
+Spend 3 ore to start building a clay-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 3 ore.
+3 clay-collecting robots collect 3 clay; you now have 6 clay.
+The new c robot is ready; you now have 4 of them.
+
+== Minute 10 ==
+Spend 3 ore to start building a clay-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 3 ore.
+4 clay-collecting robots collect 4 clay; you now have 10 clay.
+The new c robot is ready; you now have 5 of them.
+
+== Minute 11 ==
+Spend 3 ore and 8 clay to start building an obsidian-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 3 ore.
+5 clay-collecting robots collect 5 clay; you now have 7 clay.
+The new b robot is ready; you now have 1 of them.
+
+== Minute 12 ==
+3 ore-collecting robots collect 3 ore; you now have 6 ore.
+5 clay-collecting robots collect 5 clay; you now have 12 clay.
+1 obsidian-collecting robot collects 1 obsidian; you now have 1 obsidian.
+
+== Minute 13 ==
+Spend 3 ore and 8 clay to start building an obsidian-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 6 ore.
+5 clay-collecting robots collect 5 clay; you now have 9 clay.
+1 obsidian-collecting robot collects 1 obsidian; you now have 2 obsidian.
+The new b robot is ready; you now have 2 of them.
+
+== Minute 14 ==
+Spend 3 ore and 8 clay to start building an obsidian-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 6 ore.
+5 clay-collecting robots collect 5 clay; you now have 6 clay.
+2 obsidian-collecting robots collect 2 obsidian; you now have 4 obsidian.
+The new b robot is ready; you now have 3 of them.
+
+== Minute 15 ==
+3 ore-collecting robots collect 3 ore; you now have 9 ore.
+5 clay-collecting robots collect 5 clay; you now have 11 clay.
+3 obsidian-collecting robots collect 3 obsidian; you now have 7 obsidian.
+
+== Minute 16 ==
+Spend 3 ore and 8 clay to start building an obsidian-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 9 ore.
+5 clay-collecting robots collect 5 clay; you now have 8 clay.
+3 obsidian-collecting robots collect 3 obsidian; you now have 10 obsidian.
+The new b robot is ready; you now have 4 of them.
+
+== Minute 17 ==
+Spend 3 ore and 8 clay to start building an obsidian-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 9 ore.
+5 clay-collecting robots collect 5 clay; you now have 5 clay.
+4 obsidian-collecting robots collect 4 obsidian; you now have 14 obsidian.
+The new b robot is ready; you now have 5 of them.
+
+== Minute 18 ==
+Spend 3 ore and 12 obsidian to start building a geode-cracking robot.
+3 ore-collecting robots collect 3 ore; you now have 9 ore.
+5 clay-collecting robots collect 5 clay; you now have 10 clay.
+5 obsidian-collecting robots collect 5 obsidian; you now have 7 obsidian.
+The new g robot is ready; you now have 1 of them.
+
+== Minute 19 ==
+Spend 3 ore and 8 clay to start building an obsidian-collecting robot.
+3 ore-collecting robots collect 3 ore; you now have 9 ore.
+5 clay-collecting robots collect 5 clay; you now have 7 clay.
+5 obsidian-collecting robots collect 5 obsidian; you now have 12 obsidian.
+1 geode-cracking robot collects 1 geode; you now have 1 geode.
+The new b robot is ready; you now have 6 of them.
+
+== Minute 20 ==
+Spend 3 ore and 12 obsidian to start building a geode-cracking robot.
+3 ore-collecting robots collect 3 ore; you now have 9 ore.
+5 clay-collecting robots collect 5 clay; you now have 12 clay.
+6 obsidian-collecting robots collect 6 obsidian; you now have 6 obsidian.
+1 geode-cracking robot collects 1 geode; you now have 2 geode.
+The new g robot is ready; you now have 2 of them.
+
+== Minute 21 ==
+3 ore-collecting robots collect 3 ore; you now have 12 ore.
+5 clay-collecting robots collect 5 clay; you now have 17 clay.
+6 obsidian-collecting robots collect 6 obsidian; you now have 12 obsidian.
+2 geode-cracking robots collect 2 geode; you now have 4 geode.
+
+== Minute 22 ==
+Spend 3 ore and 12 obsidian to start building a geode-cracking robot.
+3 ore-collecting robots collect 3 ore; you now have 12 ore.
+5 clay-collecting robots collect 5 clay; you now have 22 clay.
+6 obsidian-collecting robots collect 6 obsidian; you now have 6 obsidian.
+2 geode-cracking robots collect 2 geode; you now have 6 geode.
+The new g robot is ready; you now have 3 of them.
+
+== Minute 23 ==
+3 ore-collecting robots collect 3 ore; you now have 15 ore.
+5 clay-collecting robots collect 5 clay; you now have 27 clay.
+6 obsidian-collecting robots collect 6 obsidian; you now have 12 obsidian.
+3 geode-cracking robots collect 3 geode; you now have 9 geode.
+
+== Minute 24 ==
+3 ore-collecting robots collect 3 ore; you now have 18 ore.
+5 clay-collecting robots collect 5 clay; you now have 32 clay.
+6 obsidian-collecting robots collect 6 obsidian; you now have 18 obsidian.
+3 geode-cracking robots collect 3 geode; you now have 12 geode.
