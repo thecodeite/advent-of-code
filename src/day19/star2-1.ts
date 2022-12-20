@@ -1,7 +1,7 @@
 import { writeFileSync } from "node:fs";
 import { Blueprint, Input } from "./parse";
 
-const minutesAvailable = 32;
+const minutesAvailable = 24;
 
 const traceLog: string[] = [];
 const trace = (arg?: string) => {
@@ -569,16 +569,15 @@ function runBlueprint(blueprint: Blueprint): State {
 const calDate = process.env.CAL_DATE;
 
 export function solve(input: Input) {
-  const q = input.blueprints.slice(0, 3).map(blueprint => {
-    //console.time(`blueprint ${blueprint.id}`);
+  const q = input.blueprints.map(blueprint => {
+    // console.time(`blueprint ${blueprint.id}`);
     const best = runBlueprint(blueprint);
-    //console.timeEnd(`blueprint ${blueprint.id}`);
-    //console.log(`Best for blueprint ${blueprint.id} is ${best.geo}`);
-    return best.geo;
+    // console.timeEnd(`blueprint ${blueprint.id}`);
+    // console.log(`Best for blueprint ${blueprint.id} is ${best.geo}`);
+    return best.geo * blueprint.id;
   });
 
-  // console.log("q:", q);
-  return q.product();
+  return q.sum();
   // const best1 = runBlueprint(input.blueprints[0]);
   // replayBlueprint(input.blueprints[0], createNewState(), best1.actions);
   // writeFileSync(`./src/day${calDate}/trace.txt`, traceLog.join("\n"));
