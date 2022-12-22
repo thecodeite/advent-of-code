@@ -1,11 +1,8 @@
-import { Input, Map, Pos } from "./parse";
+import { Dir, Input, Map, Pos } from "./parse";
 
 const FgRed = "\x1b[31m";
 const FgGreen = "\x1b[32m";
 const Reset = "\x1b[0m";
-
-type Dir = ">" | "v" | "<" | "^";
-const dirs: Dir[] = [">", "v", "<", "^"];
 
 const value: Record<Dir, number> = {
   ">": 0,
@@ -164,7 +161,7 @@ export function solve(input: Input) {
     }
     if (debug) dump(map, pos, dir);
   }
-  dump(map, pos, dir);
+  // dump(map, pos, dir);
 
   const [col0, row0] = pos;
   const [col, row] = [col0 + 1, row0 + 1];

@@ -1,10 +1,12 @@
 export type PathMove = number | "L" | "R";
 export type Map = string[][];
 export type Pos = [number, number];
-
+export type Dir = ">" | "v" | "<" | "^";
 export interface Input {
   map: Map;
   path: PathMove[];
+  start: Pos;
+  dir: Dir;
 }
 
 export function parse(file: string): Input {
@@ -19,5 +21,5 @@ export function parse(file: string): Input {
       else return parseInt(m) as PathMove;
     });
 
-  return { map, path };
+  return { map, path, start: [0, 0], dir: ">" };
 }

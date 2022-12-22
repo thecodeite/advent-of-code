@@ -9,7 +9,8 @@ console.log(`running day ${calDate}`);
 
 const file = await fs.readFile(`./src/day${calDate}/data.txt`, "utf8");
 /* cSpell:disable */
-const example = `        ...#
+const exampleX = `
+        ...#
         .#..
         #...
         ....
@@ -20,21 +21,33 @@ const example = `        ...#
         ...#....
         .....#..
         .#......
-        ......#.
+        ......#.`;
+const example = `
         ....
         ....
+        ....
+        ....
+............
+............
+............
+............
+        ........
+        ........
+        ........
+        ........
 
-10R5L5R10L4R5L5`;
+2`.substring(1);
 /* cSpell:enable */
 let doReal = false;
-doReal = true;
+// doReal = true;
 
 const input = parse(doReal ? file : example);
+input.start = [1, 3];
+input.dir = "<";
+// console.time("star1");
+// console.log("The solution to star 1 is:", solve1(input));
+// console.timeEnd("star1");
 
-console.time("star1");
-console.log("The solution to star 1 is:", solve1(input));
-console.timeEnd("star1");
-
-// console.time("star2");
-// console.log("The solution to star 2 is:", solve2(input));
-// console.timeEnd("star2");
+console.time("star2");
+console.log("The solution to star 2 is:", solve2(input));
+console.timeEnd("star2");
