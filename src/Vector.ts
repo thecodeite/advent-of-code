@@ -11,6 +11,14 @@ export class Vector implements Point {
     this.y = y;
   }
 
+  eq(v?: Vector) {
+    if (!v) return false;
+    return v.x == this.x && v.y === this.y;
+  }
+  add(v: Vector): Vector {
+    return new Vector(v.x + this.x, v.y + this.y);
+  }
+
   toString() {
     return `${this.x},${this.y}`;
   }
