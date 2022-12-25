@@ -11,12 +11,22 @@ export class Vector implements Point {
     this.y = y;
   }
 
-  eq(v?: Vector) {
+  eq(v?: Point) {
     if (!v) return false;
     return v.x == this.x && v.y === this.y;
   }
-  add(v: Vector): Vector {
+  add(v: Point): Vector {
     return new Vector(v.x + this.x, v.y + this.y);
+  }
+
+  toI(width: number) {
+    return this.x + this.y * width;
+  }
+
+  static fromI(i: number, width: number) {
+    const x = i % width;
+    const y = Math.floor(i / width);
+    return new Vector(x, y);
   }
 
   toString() {
@@ -53,6 +63,9 @@ export class Vector implements Point {
     const dx = target.x - this.x;
     const dy = target.y - this.y;
     return dx * dx + dy * dy;
+  }
+  distanceTo(target: Vector) {
+    return Math.sqrt(this.squDistTo(target));
   }
 
   symbolFrom(target: Vector) {
