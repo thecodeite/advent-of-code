@@ -2,5 +2,5 @@
   "watch": ["src"],
   "ext": "ts,json",
   "ignore": ["src/**/*.spec.ts"],
-  "exec": "node --no-warnings --loader ts-node/esm --experimental-specifier-resolution node src/2023/day$CAL_DATE/run.ts"
+  "exec": "node --no-warnings --loader ts-node/esm --experimental-specifier-resolution=node src/2023/day$CAL_DATE/run.ts"
 }
