@@ -4,7 +4,7 @@ export interface RangeMap {
   toStart: number;
   fromStart: number;
   length: number;
-} 
+}
 
 interface Section {
   from: string;
@@ -34,21 +34,21 @@ function readSection(text: string): Section {
   const header = lines.shift() || '';
   const [from, to] = header.split(" ")[0].split('-to-');
   const maps = lines.map(readRangeMap);
-  return {from, to, maps};
+  return { from, to, maps };
 }
 
 export function parse(file: string): Input {
   const lines = file.split("\n");
 
-  const seedsStr = lines.shift() ||''; 
+  const seedsStr = lines.shift() || '';
   lines.shift();
-  
+
   const seeds = readNumbers(seedsStr)
 
   const sections = lines.join("\n").split("\n\n").map(readSection);
-   
 
-  return { 
+
+  return {
     lines: [
       seeds.toString(),
       ...sections.map(x => JSON.stringify(x))

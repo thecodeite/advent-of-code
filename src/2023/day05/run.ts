@@ -55,6 +55,6 @@ console.time("star1");
 console.log("The solution to star 1 is:", solve1(input1));
 console.timeEnd("star1");
 
-// console.time("star2");
-// console.log("The solution to star 2 is:", solve2(input2));
-// console.timeEnd("star2");
+console.time("star2");
+console.log("The solution to star 2 is:", solve2(input2));
+console.timeEnd("star2");
