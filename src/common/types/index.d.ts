@@ -8,12 +8,14 @@ declare global {
     max(fn: (item: T) => number): T;
     min(): number;
     min(fn: (item: T) => number): T;
+    groupBy<U>(fn: (item: T) => U): Map<U, T[]>;
     grouped(groupSize: number): T[][];
     rotateCW(): T[];
     rotateACW(): T[];
     take(length: number): T[];
     slidingG(windowLength: number): Generator<T[], null, unknown>;
     reverseSafe(): T[];
+    sortBy(fn: (item: T) => number): T[];
   }
 
   interface String {

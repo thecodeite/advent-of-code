@@ -31,6 +31,20 @@ if (!Array.prototype.min) {
   };
 }
 
+if (!Array.prototype.groupBy) {
+  Array.prototype.groupBy = function (fn: (arg: any) => any) {
+    const result = new Map();
+    for (const item of this) {
+      const key = fn(item);
+      if (!result.has(key)) {
+        result.set(key, []);
+      }
+      result.get(key).push(item);
+    }
+    return result;
+  };
+}
+
 if (!Array.prototype.grouped) {
   Array.prototype.grouped = function (groupSize: number) {
     const result = [];
@@ -95,6 +109,12 @@ if (!String.prototype.stripPrefix) {
 if (!String.prototype.stripPostfix) {
   String.prototype.stripPostfix = function (postfix: string): string {
     return this.substring(-postfix.length);
+  };
+}
+
+if (!Array.prototype.sortBy) {
+  Array.prototype.sortBy = function <T>(fn: (item: T) => number) {
+    return [...this].sort((a, b) => fn(a) - fn(b));
   };
 }
 
