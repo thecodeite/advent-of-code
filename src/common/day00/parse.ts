@@ -3,5 +3,6 @@ export interface Input {
 }
 
 export function parse(file: string): Input {
-  return { lines: file.split("\n") };
+  const lines = file.split("\n");
+  return { lines };
 }
