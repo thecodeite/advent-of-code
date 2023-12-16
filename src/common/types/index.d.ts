@@ -15,7 +15,7 @@ declare global {
     take(length: number): T[];
     slidingG(windowLength: number): Generator<T[], null, unknown>;
     reverseSafe(): T[];
-    sortBy(fn: (item: T) => number): T[];
+    sortBy(fn?: (item: T) => number): T[];
   }
 
   interface String {

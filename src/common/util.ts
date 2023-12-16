@@ -113,7 +113,8 @@ if (!String.prototype.stripPostfix) {
 }
 
 if (!Array.prototype.sortBy) {
-  Array.prototype.sortBy = function <T>(fn: (item: T) => number) {
+  Array.prototype.sortBy = function <T>(fn?: (item: T) => number) {
+    if (!fn) return [...this].sort((a, b) => a - b);
     return [...this].sort((a, b) => fn(a) - fn(b));
   };
 }
