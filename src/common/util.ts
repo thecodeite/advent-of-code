@@ -123,6 +123,11 @@ export function range(length: number) {
   return Array.from({ length }, (_, i) => i);
 }
 
+export function subRange(start: number, end: number) {
+  const length = end - start;
+  return Array.from({ length }, (_, i) => i + start);
+}
+
 export function repeat(char: string, length: number) {
   return Array.from({ length }, (_, i) => char).join("");
 }
