@@ -18,7 +18,7 @@ const example1 = `???.### 1,1,3
 const example2 = example1;
 /* cSpell:enable */
 let doExample = file.length === 0;
-doExample = true;
+// doExample = true;
 
 const input1 = parse(doExample ? example1 : file);
 const input2 = parse(doExample ? example2 : file);

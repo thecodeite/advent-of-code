@@ -2,7 +2,7 @@ import { Input, SpringRecord } from "./parse";
 
 export function solve(input: Input) {
   const res = input.springRecords.map(record => {
-    console.log(record);
+    //console.log(record);
     return solveSpringRecord(record);
   });
   return res.sum();
@@ -32,6 +32,9 @@ function solveSpringRecord(record: SpringRecord) {
       possible++;
     }
   }
+
+  // console.log({ data, check, possible });
+
   return possible;
   // console.log(qs);
 }

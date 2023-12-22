@@ -1,43 +1,101 @@
-import { Input, SpringRecord } from "./parse";
+import { Input } from "./parse";
 
 export function solve(input: Input) {
-  const res = input.unfoldedSpringRecords.map(record => {
-    console.log(record);
-    return solveSpringRecord(record);
+  const { lines } = input;
+  const res = lines.map(line => {
+    const unfolded = unFold(line);
+    return solveSpringRecord(unfolded);
   });
   return res.sum();
 }
 
-function solveSpringRecord(record: SpringRecord) {
-  const { data, check } = record;
-  const checkStr = check.join();
-  const dataArr = [...data];
-  const qCount = dataArr.filter(x => x === "?").length;
-  const qPos = dataArr
-    .map((x, i) => (x === "?" ? i : -1))
-    .filter(x => x !== -1);
-  const perms = 2 ** qCount;
-  let possible = 0;
-  for (let n = 0; n < perms; n++) {
-    const qs = n.toString(2).padStart(qCount, "0");
+function isNext(next: string | undefined): next is "." | "#" | undefined {
+  return next === "." || next === "#" || next === undefined;
+}
 
-    [...qs].forEach((q, i) => {
-      dataArr[qPos[i]] = q === "0" ? "." : "#";
-    });
-    const str = dataArr.join("");
-    const newCheck = calcCheck(str);
-    const isMatch = newCheck === checkStr;
-    // console.log(str, newCheck, isMatch);
-    if (isMatch) {
-      possible++;
+const memo = new Map<string, number>();
+
+function parseLine(line: string) {
+  const [data, checkStr, next] = line.split(" ");
+  if (!isNext(next)) throw new Error(`Not a next: >${next}<`);
+  const check = checkStr
+    ? checkStr.split(",").map(num => parseInt(num, 10))
+    : [];
+  return { data: [...data], check, next };
+}
+
+// export function solveLine(line: string) {
+//   // if (memo.has(line)) return memo.get(line)!;
+
+//   console.log(`"${line}" = ${result}`);
+//   memo.set(line, result);
+//   return result;
+// }
+
+export function solveSpringRecord(line: string): number {
+  if (memo.has(line)) return memo.get(line)!;
+
+  const { data, check, next } = parseLine(line);
+
+  const answer = (() => {
+    const [char, ...rest] = data;
+
+    if (next && char !== "?" && next !== char) {
+      return 0;
     }
-  }
-  return possible;
-  // console.log(qs);
+
+    if (rest.length === 0) {
+      if (check.length > 1) return 0;
+      if (char === "?") {
+        if (next === "." && check.length > 0) return 0;
+        if (next === "#" && check.length === 0) return 0;
+        if (check.length === 0) return 1;
+        return check[0] === 1 ? 1 : 0;
+      } else if (char === ".") {
+        if (check.length === 0) return 1;
+        return 0;
+      } else if (char === "#") {
+        if (check.length === 0) return 0;
+        return check[0] === 1 ? 1 : 0;
+      }
+    } else {
+      if (char === ".") {
+        return solveSpringRecord(`${rest.join("")} ${check.join()}`);
+      } else if (char === "#") {
+        if (check.length === 0) return 0;
+        const [first, ...restCheck] = check;
+        if (first === 1) {
+          return solveSpringRecord(`${rest.join("")} ${restCheck.join()} .`);
+        } else {
+          return solveSpringRecord(
+            `${rest.join("")} ${[first - 1, ...restCheck].join()} #`,
+          );
+        }
+      } else if (char === "?") {
+        const withHash = solveSpringRecord(
+          `${["#", ...rest].join("")} ${check.join()}${next ? ` ${next}` : ""}`,
+        );
+        const withDot = solveSpringRecord(
+          `${[".", ...rest].join("")} ${check.join()}${next ? ` ${next}` : ""}`,
+        );
+
+        return withHash + withDot;
+      }
+      throw new Error("Not implemented");
+    }
+    throw new Error("Not possible");
+  })();
+
+  memo.set(line, answer);
+  return answer;
 }
 
-function calcCheck(data: string) {
-  const springs = data.split(/\.+/).map(spring => spring.length);
-  // console.log("springs:", springs);
-  return springs.filter(x => x > 0).join();
+export function unFold(line: string) {
+  const [data, checkStr] = line.split(" ");
+  const unfoldedData = `${data}?${data}?${data}?${data}?${data}`;
+  const unfoldedSpringRecords = `${checkStr},${checkStr},${checkStr},${checkStr},${checkStr}`;
+
+  return `${unfoldedData} ${unfoldedSpringRecords}`;
 }
+
+// 1st guess: 1493340882140 (Took 3.7 seconds) -> Correct!
