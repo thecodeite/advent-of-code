@@ -119,6 +119,17 @@ if (!Array.prototype.sortBy) {
   };
 }
 
+if (!Array.prototype.asEntries) {
+  Array.prototype.asEntries = function <T>() {
+    return Object.fromEntries(this);
+  };
+}
+if (!Array.prototype.asEntriesOptional) {
+  Array.prototype.asEntriesOptional = function <T>() {
+    return Object.fromEntries(this);
+  };
+}
+
 export function range(length: number) {
   return Array.from({ length }, (_, i) => i);
 }
