@@ -129,6 +129,19 @@ if (!Array.prototype.asEntriesOptional) {
     return Object.fromEntries(this);
   };
 }
+if (!Array.prototype.map2d) {
+  Array.prototype.map2d = function <T, U>(
+    fn?: (n: T, y: number, x: number) => U,
+  ) {
+    return this.map((row, y) => {
+      if (Array.isArray(row)) {
+        return row.map((_, x) => (fn ? fn(this[y][x], y, x) : this[y][x]));
+      } else {
+        return structuredClone(row);
+      }
+    });
+  };
+}
 
 export function range(length: number) {
   return Array.from({ length }, (_, i) => i);
@@ -146,5 +159,11 @@ export function repeat(char: string, length: number) {
 if (!Set.prototype.removed) {
   Set.prototype.removed = function <T>(toRemove: Set<T>) {
     return new Set([...this].filter(x => !toRemove.has(x)));
+  };
+}
+
+if (!Number.prototype.pad) {
+  Number.prototype.pad = function (length: number) {
+    return this.toString().padStart(length, " ");
   };
 }

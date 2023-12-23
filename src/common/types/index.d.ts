@@ -18,6 +18,7 @@ declare global {
     sortBy(fn?: (item: T) => number): T[];
     asEntries(): Record<T[0], T[1]>;
     asEntriesOptional(): Record<T[0], T[1] | undefined>;
+    map2d<U>(fn?: (n: T, y: number, x: number) => U): U[][];
   }
 
   interface String {
@@ -27,5 +28,9 @@ declare global {
 
   interface Set<T> {
     removed(toRemove: Set<t>): Set<t>;
+  }
+
+  interface Number {
+    pad(length: number): string;
   }
 }

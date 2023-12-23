@@ -19,6 +19,10 @@ export class Vector implements Point {
     return new Vector(v.x + this.x, v.y + this.y);
   }
 
+  sub(v: Point): Vector {
+    return new Vector(this.x - v.x, this.y - v.y);
+  }
+
   toI(width: number) {
     return this.x + this.y * width;
   }
