@@ -152,6 +152,11 @@ export function subRange(start: number, end: number) {
   return Array.from({ length }, (_, i) => i + start);
 }
 
+export function subRangeInc(start: number, end: number) {
+  const length = end - start + 1;
+  return Array.from({ length }, (_, i) => i + start);
+}
+
 export function repeat(char: string, length: number) {
   return Array.from({ length }, (_, i) => char).join("");
 }
