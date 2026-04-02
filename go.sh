@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # DATE_TODAY=$(date '+%d');
-DATE_TODAY="03";
+CURRENT_YEAR=$(cat CURRENT_YEAR);
+DATE_TODAY=$(cat DATE_TODAY);
 
-CAL_DATE="${DATE:-$DATE_TODAY}" ./node_modules/.bin/nodemon 
+CAL_YEAR=$CURRENT_YEAR CAL_DATE="${DATE:-$DATE_TODAY}" ./node_modules/.bin/nodemon 

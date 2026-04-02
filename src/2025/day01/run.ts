@@ -7,7 +7,9 @@ const calDate = process.env.CAL_DATE;
 
 console.log(`running day ${calDate}`);
 
-const file = await fs.readFile(`./src/2025/day${calDate}/data.txt`, "utf8");
+const pathToData = new URL(`./data.txt`, import.meta.url);
+const file = await fs.readFile(pathToData, "utf8");
+
 /* cSpell:disable */
 const example1 = `
 L68
