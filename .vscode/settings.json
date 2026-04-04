@@ -2,7 +2,12 @@
   "cSpell.words": [
     "addx",
     "conformalize",
+    "IDAT",
+    "IEND",
+    "IHDR",
     "permutator",
+    "PLTE",
+    "TRUECOLOR",
     "voisins"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"
