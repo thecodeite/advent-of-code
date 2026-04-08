@@ -1,37 +1,49 @@
-import { writeFileSync } from "fs";
+import { openSync, writeSync, closeSync } from "fs";
 
-export function encodePng(
-  pixels: Uint8Array,
-  width: number,
-  height: number,
-  palette?: PaletteEntry[],
-): Uint8Array {
+interface PNGDataBase {
+  width: number;
+  height: number;
+  bitsPerPixel?: number;
+  palette?: PaletteEntry[];
+}
+
+export interface PNGDataRaw extends PNGDataBase {
+  type: "raw";
+  pixels: Uint8Array;
+}
+
+export interface PNGDataPreFiltered extends PNGDataBase {
+  type: "pre-filtered";
+  scanLines: Uint8Array[];
+}
+
+export type PNGData = PNGDataRaw | PNGDataPreFiltered;
+
+export function encodePng(pngData: PNGData): Uint8Array[] {
+  const { width, height, palette, bitsPerPixel } = pngData;
+
   const pngSignature = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
 
   const colorType = palette ? ColorType.INDEXED_COLOR : ColorType.GRAYSCALE;
 
-  const ihdrChunk = createIHDRChunk(width, height, colorType);
-  const plteChunk = palette ? createPLTEChunk(palette) : new Uint8Array(0);
-  const idatChunk = createIDATChunk(pixels, width, height);
+  const ihdrChunk = createIHDRChunk(width, height, colorType, bitsPerPixel);
+  const plteChunk = palette ? createPLTEChunk(palette) : [new Uint8Array(0)];
+  const idatChunk =
+    pngData.type === "raw"
+      ? createIDATChunkRaw(pngData.pixels, width, height)
+      : createIDATChunkPreFiltered(pngData.scanLines);
   const iendChunk = createIENDChunk();
-  return concatenateUint8Arrays(
-    pngSignature,
-    ihdrChunk,
-    plteChunk,
-    idatChunk,
-    iendChunk,
-  );
+  return [pngSignature, ...ihdrChunk, ...plteChunk, ...idatChunk, ...iendChunk];
 }
 
-export function writePng(
-  filename: string,
-  pixels: Uint8Array,
-  width: number,
-  height: number,
-  palette?: PaletteEntry[],
-) {
-  const pngData = encodePng(pixels, width, height, palette);
-  writeFileSync(filename, pngData);
+export function writePng(filename: string, pngData: PNGData) {
+  const encodedPngData = encodePng(pngData);
+  // writeFileSync(filename, pngData);
+  const file = openSync(filename, "w");
+  for (const chunk of encodedPngData) {
+    writeSync(file, chunk);
+  }
+  closeSync(file);
 }
 
 enum ColorType {
@@ -46,20 +58,21 @@ function createIHDRChunk(
   width: number,
   height: number,
   colorType: ColorType,
-): Uint8Array {
+  bitsPerPixel: number = 8,
+): Uint8Array[] {
   const chunkData = new Uint8Array(13);
   const view = new DataView(chunkData.buffer);
   view.setUint32(0, width);
   view.setUint32(4, height);
-  chunkData[8] = 8; // Bit depth
+  chunkData[8] = bitsPerPixel; // Bit depth
   chunkData[9] = colorType; // Color type
   chunkData[10] = 0; // Compression method
   chunkData[11] = 0; // Filter method
   chunkData[12] = 0; // Interlace method
-  return createChunk("IHDR", chunkData);
+  return createChunk("IHDR", [chunkData]);
 }
 
-function wrapWithDeflate(pixels: Uint8Array): Uint8Array {
+function wrapWithDeflate(pixels: Uint8Array[]): Uint8Array[] {
   // This is a very naive implementation of the DEFLATE algorithm.
   // It does not actually compress the data, but it wraps it in the necessary headers and footers.
 
@@ -67,7 +80,7 @@ function wrapWithDeflate(pixels: Uint8Array): Uint8Array {
 
   const blockHeader = new Uint8Array(5);
   blockHeader[0] = 0x01; // Final block, no compression
-  const len = pixels.length;
+  const len = pixels.reduce((sum, arr) => sum + arr.length, 0);
   blockHeader[1] = len & 0xff; // Length (little-endian)
   blockHeader[2] = (len >> 8) & 0xff; // Length (little-endian)
   const nLen = ~len & 0xffff;
@@ -81,24 +94,40 @@ function wrapWithDeflate(pixels: Uint8Array): Uint8Array {
   return concatenateUint8Arrays(header, blockHeader, pixels, footer);
 }
 
-function calculateAdler32(data: Uint8Array): number {
+function calculateAdler32(data: Uint8Array[]): number {
   let a = 1;
   let b = 0;
-  for (const byte of data) {
-    a = (a + byte) % 65521;
-    b = (b + a) % 65521;
+  for (const arr of data) {
+    for (const byte of arr) {
+      a = (a + byte) % 65521;
+      b = (b + a) % 65521;
+    }
   }
   return (b << 16) | a;
 }
 
-function createIDATChunk(
+function createIDATChunkRaw(
   pixels: Uint8Array,
   width: number,
   height: number,
-): Uint8Array {
+): Uint8Array[] {
   // For simplicity, we won't actually compress the data here.
   // In a real implementation, you would need to compress the pixel data using zlib.
-  const wrappedPixels = wrapWithDeflate(wrapWithFilter(pixels, width, height));
+  console.log(`Starting wrap`);
+  const scanLines = wrapWithFilter(pixels, width, height);
+  console.log(`Finished wrapWithFilter, starting wrapWithDeflate`);
+  const wrappedPixels = wrapWithDeflate(scanLines);
+  console.log(`Finished wrapWithDeflate, creating chunk`);
+  return createChunk("IDAT", wrappedPixels);
+
+  // const wrappedPixels = wrapWithDeflate(wrapWithFilter(pixels, width, height));
+  // return createChunk("IDAT", wrappedPixels);
+}
+
+function createIDATChunkPreFiltered(scanLines: Uint8Array[]): Uint8Array[] {
+  console.log(`Starting deflate`);
+  const wrappedPixels = wrapWithDeflate(scanLines);
+  console.log(`Finished wrapWithDeflate, creating chunk`);
   return createChunk("IDAT", wrappedPixels);
 }
 
@@ -106,33 +135,38 @@ function wrapWithFilter(
   pixels: Uint8Array,
   width: number,
   height: number,
-): Uint8Array {
+): Uint8Array[] {
   // This is a very naive implementation of PNG filtering.
   // It simply adds a filter byte (0) at the beginning of each scan line.
-  const result = new Uint8Array((width + 1) * height);
+  // const result = new Uint8Array((width + 1) * height);
+  let result: Uint8Array[] = [];
   for (let y = 0; y < height; y++) {
-    result[y * (width + 1)] = 0; // No filter
+    const scanLine = new Uint8Array(width + 1);
+    scanLine[0] = 0;
+    const offset = y * width;
     for (let x = 0; x < width; x++) {
-      result[y * (width + 1) + x + 1] = pixels[y * width + x];
+      scanLine[x + 1] = pixels[offset + x];
     }
+    result.push(scanLine);
   }
   return result;
 }
 
-function createIENDChunk(): Uint8Array {
-  return createChunk("IEND", new Uint8Array(0));
+function createIENDChunk(): Uint8Array[] {
+  return createChunk("IEND", [new Uint8Array(0)]);
 }
 
-function createChunk(type: string, data: Uint8Array): Uint8Array {
+function createChunk(type: string, data: Uint8Array[]): Uint8Array[] {
   const chunkType = new TextEncoder().encode(type);
   const length = new Uint8Array(4);
   const view = new DataView(length.buffer);
-  view.setUint32(0, data.length);
+  const dataLength = data.reduce((sum, arr) => sum + arr.length, 0);
+  view.setUint32(0, dataLength);
   const crc = calculateCRC(chunkType, data);
-  return concatenateUint8Arrays(length, chunkType, data, crc);
+  return [length, chunkType, ...data, crc];
 }
 
-function calculateCRC(type: Uint8Array, data: Uint8Array): Uint8Array {
+function calculateCRC(type: Uint8Array, data: Uint8Array[]): Uint8Array {
   const crcTable = new Uint32Array(256);
   for (let n = 0; n < 256; n++) {
     let c = n;
@@ -145,8 +179,10 @@ function calculateCRC(type: Uint8Array, data: Uint8Array): Uint8Array {
   for (const byte of type) {
     crc = crcTable[(crc ^ byte) & 0xff] ^ (crc >>> 8);
   }
-  for (const byte of data) {
-    crc = crcTable[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+  for (const arr of data) {
+    for (const byte of arr) {
+      crc = crcTable[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+    }
   }
   crc ^= 0xffffffff;
   const result = new Uint8Array(4);
@@ -155,19 +191,22 @@ function calculateCRC(type: Uint8Array, data: Uint8Array): Uint8Array {
   return result;
 }
 
-function concatenateUint8Arrays(...arrays: Uint8Array[]): Uint8Array {
-  const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
-  const result = new Uint8Array(totalLength);
-  let offset = 0;
-  for (const arr of arrays) {
-    result.set(arr, offset);
-    offset += arr.length;
-  }
-  return result;
+function concatenateUint8Arrays(
+  ...arrays: (Uint8Array | Uint8Array[])[]
+): Uint8Array[] {
+  return arrays.flat();
+  // const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
+  // const result = new Uint8Array(totalLength);
+  // let offset = 0;
+  // for (const arr of arrays) {
+  //   result.set(arr, offset);
+  //   offset += arr.length;
+  // }
+  // return result;
 }
 
-function createPLTEChunk(palette: PaletteEntry[]): Uint8Array {
-  const paletteSize = 8;
+function createPLTEChunk(palette: PaletteEntry[]): Uint8Array[] {
+  const paletteSize = palette.length;
 
   const chunkData = new Uint8Array(paletteSize * 3);
   for (let i = 0; i < paletteSize; i++) {
@@ -176,7 +215,7 @@ function createPLTEChunk(palette: PaletteEntry[]): Uint8Array {
     chunkData[i * 3 + 1] = entry.g;
     chunkData[i * 3 + 2] = entry.b;
   }
-  return createChunk("PLTE", chunkData);
+  return createChunk("PLTE", [chunkData]);
 }
 
 export interface PaletteEntry {

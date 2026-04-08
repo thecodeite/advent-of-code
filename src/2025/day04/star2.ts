@@ -1,4 +1,8 @@
-import { PaletteEntry, writePng } from "../../common/utils/simple-png";
+import {
+  PaletteEntry,
+  PNGDataRaw,
+  writePng,
+} from "../../common/utils/simple-png";
 import { Point } from "../../common/Vector";
 import { Input } from "./parse";
 import * as fs from "node:fs";
@@ -38,7 +42,13 @@ export function solve(input: Input) {
   const board: Uint8Array = new Uint8Array(width * height);
   // console.log("initialBoard:", initialBoard);
   writeDataToBoard(input, board);
-  writePng(`${imagePath}/day04-000.png`, board, width, height, palette);
+  const pngData: PNGDataRaw = {
+    type: "raw",
+    pixels: board,
+    width,
+    height,
+  };
+  writePng(`${imagePath}/day04-000.png`, pngData);
 
   const toRemove = "#";
   let colour: PaletteEntry;
@@ -77,13 +87,7 @@ export function solve(input: Input) {
     }
 
     writeDataToBoard(input, board);
-    writePng(
-      `${imagePath}/day04-${iterationToName(iteration)}.png`,
-      board,
-      width,
-      height,
-      palette,
-    );
+    writePng(`${imagePath}/day04-${iterationToName(iteration)}.png`, pngData);
 
     for (const key in input.data) {
       const location = input.data[key];
